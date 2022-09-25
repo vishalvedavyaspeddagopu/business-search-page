@@ -1,0 +1,137 @@
+body {
+    background-color: #d7d7d7;
+}
+
+#main {
+    font-family: Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#asterisk {
+    color: red;
+}
+
+#submit {
+    background-color: #4D6EAB;
+    border-bottom: 5px solid #364572;
+}
+
+#reset {
+    margin-left: -2px;
+    background-color: #FCB504;
+    border-bottom: 5px solid #F78204;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    width: 115px;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.section_2 {
+    width: 550px;
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+label {
+    color: #4E70AD;
+}
+
+#search {
+    height: 540px;
+    width: 620px;
+    margin: auto;
+    border: 5px solid rgb(187, 184, 184);
+    background-color: white;
+}
+
+.form-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input_row {
+    margin-top: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 550px;
+}
+
+hr {
+    margin-top: 22px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 550px;
+    border: 0.5px solid #4E70AD;
+}
+
+#locate {
+    font-size: 20px;
+}
+
+.input_row_2 {
+    display: inline-block;
+    width: 30%;
+}
+
+.input_row_3 {
+    float: right;
+    width: 50%;
+}
+
+.text_box {
+    width: 100%;
+    margin-top: 8px;
+    box-sizing: border-box;
+    padding: 6px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d7d7d7;
+    font-size: 16px;
+    border-width: 1.5px;
+}
+
+input:focus {
+    outline: none;
+    border-color: black;
+}
+
+select:focus {
+    outline: none;
+    border-color: black;
+}
+
+.img-container {
+    overflow: hidden;
+    height: 135px;
+    max-height: 300px;
+    position: relative;
+}
+
+.img {
+    display: block;
+    width: 100%;
+    height: auto;
+    position: absolute;
+    bottom: 0;
+ }
+
+ .title {
+    position: absolute;
+    bottom: 10px;
+    left: 40px;
+    color: white;
+ }
