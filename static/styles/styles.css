@@ -135,3 +135,72 @@ select:focus {
     left: 40px;
     color: white;
  }
+
+table, th, td {
+    border: 1px solid #d7d7d7;
+    background-color: white;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th {
+    background-color: #4D6EAB;
+}
+
+#detail {
+    width: 825px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+    text-align: center;
+    margin-top: 30px;
+}
+
+#detail_images {
+    height: 300px;
+    width: 250px;
+    border: 1px solid #d7d7d7;
+    display: inline-block;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+
+#detail_images img {
+    height: 250px;
+    width: 250px;
+    object-fit: contain;
+}
+
+.panel {
+    height: 350px;
+    width: 45%;
+    text-align: left;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+thead tr th {
+    height: 48px;
+}
+
+#number {
+    width: 50px;
+}
+
+#rating_cell, #distance_cell {
+    height: 120px;
+    width: 150px;
+    /* box-sizing: border-box; */
+}
+
+#image_cell {
+    height: 120px;
+    width: 110px;
+}
+
+table {
+    width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 130px;
+}

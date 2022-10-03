@@ -5,6 +5,7 @@
         <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
     </head>
     <body>
+        <script src="{{url_for('static', filename='javascript/pagescript.js')}}"></script>
         <div id="main">
             <div id="search">
                 <div class="img-container">
@@ -15,7 +16,7 @@
                     </div>
                 </div>
                 <div class="form-container">
-                    <form action="/action_page.php">
+                    <form id="form">
                         <div class="input_row">
                             <label for="keyword">Keyword<span id="asterisk">*</span></label><br>
                             <input class="text_box" type="text" id="keyword" name="keyword"><br>
@@ -27,7 +28,7 @@
                             </div>
                             <div class="input_row_3">
                                 <label for="category">Category<span id="asterisk">*</span></label>
-                                <select name="category" class="text_box">
+                                <select name="category" class="text_box" id="category">
                                     <option value="Default">Default</option>
                                     <option value="Arts & Entertainment">Arts & Entertainment</option>
                                     <option value="Health & Medical">Health & Medical</option>
@@ -47,12 +48,14 @@
                             <input type="checkbox" id="auto-locate" name="auto-locate" value="auto-locate">
                         </div>
                         <div class="section_2">
-                            <input id="submit" class="button" type="submit" value="SUBMIT">
+                            <input id="submit" class="button" type="button" value="SUBMIT" onclick="getSearchResults('/getNearbyBusinesses')">
                             <input id="reset" class="button" type="reset" value="CLEAR">
                         </div>
                     </form>
                 </div> 
             </div>
+            <div id="grid"></div>
+            <div id="detail"></div>
         </div>
     </body>
 </html>
