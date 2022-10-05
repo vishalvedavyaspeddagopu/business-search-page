@@ -10,6 +10,16 @@ body {
     color: red;
 }
 
+.detail_info {
+    margin-bottom: 50px;
+}
+
+.detail_info .heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
 #submit {
     background-color: #4D6EAB;
     border-bottom: 5px solid #364572;
@@ -165,19 +175,57 @@ th {
     margin-bottom: 30px;
 }
 
+#shop_status{
+    background-color: red; /* Green */
+    border: none;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 17px;
+    text-align: center;
+    font-size: 16px;
+}
+
 #detail_images img {
     height: 250px;
     width: 250px;
     object-fit: contain;
+    object-position: 0 0;
+    margin-bottom: 18px;
 }
 
-.panel {
+/* .panel {
     height: 350px;
     width: 45%;
     text-align: left;
     display: inline-block;
     box-sizing: border-box;
-}
+} */
+ .panel {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    /* width: 100%; */
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+ }
+
+ #business_title {
+    padding-top: 40px;
+ }
+
+ #hr_detail {
+    border: 0.5px solid #d7d7d7;
+    width: 785px;
+    margin-left: 20px;
+    margin-right: 20px;
+ }
+
+ .detail_section {
+    width: 50%;
+ }
 
 thead tr th {
     height: 48px;
@@ -203,4 +251,14 @@ table {
     margin-left: auto;
     margin-right: auto;
     margin-top: 130px;
+}
+
+#norecord {
+    width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 130px;
+    text-align: center;
+    background-color: whitesmoke;
+    border: 1px solid #d7d7d7;
 }

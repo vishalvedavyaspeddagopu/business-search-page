@@ -5,7 +5,6 @@
         <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
     </head>
     <body>
-        <script src="{{url_for('static', filename='javascript/pagescript.js')}}"></script>
         <div id="main">
             <div id="search">
                 <div class="img-container">
@@ -19,16 +18,16 @@
                     <form id="form">
                         <div class="input_row">
                             <label for="keyword">Keyword<span id="asterisk">*</span></label><br>
-                            <input class="text_box" type="text" id="keyword" name="keyword"><br>
+                            <input class="text_box" type="text" id="keyword" name="keyword" required><br>
                         </div>
                         <div class="section_2">
                             <div class="input_row_2">
-                                <label for="distance">Distance(miles)<span id="asterisk">*</span></label><br>
+                                <label for="distance">Distance(miles)</label><br>
                                 <input class="text_box" type="text" id="distance" name="distance" value="10">
                             </div>
                             <div class="input_row_3">
                                 <label for="category">Category<span id="asterisk">*</span></label>
-                                <select name="category" class="text_box" id="category">
+                                <select name="category" class="text_box" id="category" required>
                                     <option value="Default">Default</option>
                                     <option value="Arts & Entertainment">Arts & Entertainment</option>
                                     <option value="Health & Medical">Health & Medical</option>
@@ -40,16 +39,16 @@
                         </div>
                         <div class="input_row">
                             <label for="location">Location<span id="asterisk">*</span></label><br>
-                            <input class="text_box" type="text" id="location" name="location"><br>
+                            <input class="text_box" type="text" id="location" name="location" required><br>
                         </div>
                         <hr>
                         <div class="input_row">
                             <label id="locate" for="auto-locate">Want us to auto-detect your location? Check here</label>
-                            <input type="checkbox" id="auto-locate" name="auto-locate" value="auto-locate">
+                            <input type="checkbox" id="auto-locate" name="auto-locate" value="auto-locate" onclick="disableLocationBox()">
                         </div>
                         <div class="section_2">
-                            <input id="submit" class="button" type="button" value="SUBMIT" onclick="getSearchResults('/getNearbyBusinesses')">
-                            <input id="reset" class="button" type="reset" value="CLEAR">
+                            <input id="submit" class="button" type="submit" value="SUBMIT">
+                            <input id="reset" class="button" type="button" value="CLEAR" onclick="resetToDefault()">
                         </div>
                     </form>
                 </div> 
@@ -57,5 +56,6 @@
             <div id="grid"></div>
             <div id="detail"></div>
         </div>
+        <script src="{{url_for('static', filename='javascript/pagescript.js')}}"></script>
     </body>
 </html>

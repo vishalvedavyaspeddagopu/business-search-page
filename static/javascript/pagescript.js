@@ -7,44 +7,75 @@ let sortingKeys = {
 };
 
 function fillBusinessDetails(detail) {
-    return `<div>
-                <p>${detail.name}</p>
-                <hr>
-            </div>
-            <div>
+    let text = `<div>
+                    <h2 id="business_title">${detail.name}</h2>
+                    <hr id="hr_detail">
+                </div>
                 <div class="panel">
-                    <h2>Status</h2>
-                    <p>${detail.is_open_now ? "Open Now" : "Closed"}</p>
-                    <h2>Address</h2>
-                    <p>${detail.location.display_address.join(' ')}</p>
-                    <h2>Transactions Supported</h2>
-                    <p>${detail.transactions.join(' ')}</p>
-                    <h2>More info</h2>
+                    <div class="detail_section">`;
+
+    if(detail.hours && detail.hours.length >= 1 && detail.hours[0].is_open_now != null) {
+        text += `<div class="detail_info">
+                    <div class="heading">Status</div>
+                    <button id="shop_status" style="background-color:${detail.hours[0].is_open_now ? "green" : "red"}">${detail.hours[0].is_open_now ? "Open Now" : "Closed"}</button>
+                </div>`;
+    }
+    if(detail.location) {
+        let daddress = detail.location.display_address.join(' ').length >= 1 ? detail.location.display_address.join(' ') : detail.location.address1;
+        if(daddress) {
+            text += `<div class="detail_info">
+                    <div class="heading">Address</div>
+                    <div>${detail.location.display_address.join(' ')}</div>
+                </div>`;
+        }
+    }
+    if(detail.transactions && detail.transactions.length >= 1) {
+        text += `<div class="detail_info">
+                    <div class="heading">Transactions Supported</div>
+                    <div>${detail.transactions.join(' ')}</div>
+                </div>`;
+    }
+    if(detail.url) {
+        text += `<div class="detail_info">
+                    <div class="heading">More info</div>
                     <a href="${detail.url}">Yelp</a>
-                </div>
-                <div class="panel">
-                    <h2>Category</h2>
-                    <p>
-                        ${detail.categories.map(each => each["title"]).join(' | ')}
-                    </p>
-                    <h2>Phone Number</h2>
-                    <p>${detail.display_phone}</p>
-                    <h2>Price</h2>
-                    <p>${detail.price}</p>
-                </div>
-            </div>
-            <div id="detail_images">
-                <img src="${detail.photos[0]}"/>
-                <div>Photo 1</div>     
-            </div>
-            <div id="detail_images">
-                <img src="${detail.photos[1]}"/>
-                <div>Photo 2</div>     
-            </div>
-            <div id="detail_images">
-                <img src="${detail.photos[2]}"/>
-                <div>Photo 3</div>     
-            </div>`;
+                </div>`;
+    }
+
+    text += `</div>
+            <div class="detail_section">`;
+
+    if(detail.categories) {
+        text += `<div class="detail_info">
+                    <div class="heading">Category</div>
+                    <div>${detail.categories.map(each => each["title"]).join(' | ')}</div>
+                </div>`;
+    }
+    if(detail.display_phone) {
+        text += `<div class="detail_info">
+                    <div class="heading">Phone Number</div>
+                    <div>${detail.display_phone}</div>
+                </div>`;
+    }
+    if(detail.price) {
+        text += `<div>
+                    <div class="heading">Price</div>
+                    <div>${detail.price}</div>
+                </div>`;
+    }
+
+    text += `</div>
+        </div>`;
+
+    for(let i = 0; i < Math.min(detail.photos.length, 3); i++)
+    {
+        text += `<div id="detail_images">
+                    <img src="${detail.photos[i]}"/>
+                    <div>Photo ${i + 1}</div>     
+                </div>`;
+    }
+
+    return text;
 }
 
 function getBusinessDetail(index) {
@@ -83,6 +114,29 @@ function sortData(sortingKey) {
         return compareValue;
     });
     document.getElementById("grid").innerHTML = generateTable(data);
+}
+
+function resetToDefault() {
+    document.getElementById("keyword").value = "";
+    document.getElementById("distance").value = 10;
+    document.getElementById("category").value = "Default";
+    document.getElementById("location").value = "";
+    document.getElementById("location").disabled = false;
+    document.getElementById("location").style.backgroundColor = "white";
+    document.getElementById("auto-locate").checked = false;
+    document.getElementById("grid").innerHTML = "";
+    document.getElementById("detail").innerHTML = "";
+}
+
+function disableLocationBox() {
+    if(document.getElementById("location").disabled) {
+        document.getElementById("location").disabled = false;
+        document.getElementById("location").style.backgroundColor = "white";
+    } else {
+        document.getElementById("location").value = "";
+        document.getElementById("location").disabled = true;
+        document.getElementById("location").style.backgroundColor = "#d6d6d6";
+    }
 }
 
 function createRow(index, image, name, rating, distance) {
@@ -128,9 +182,23 @@ function getJsonResult(url) {
     request.onreadystatechange = () => {
       if (request.readyState === XMLHttpRequest.DONE) {
         if(request.status === 200) {
-            let result = JSON.parse(request.responseText);
-            data = result["businesses"];
-            document.getElementById("grid").innerHTML = generateTable(data);
+            try 
+            {
+                let result = JSON.parse(request.responseText);
+                data = result["businesses"];
+                if(data.length > 0) {
+                    document.getElementById("grid").innerHTML = generateTable(data);
+                } else {
+                    document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+                }
+            } 
+            catch(err)
+            {
+                document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+            }            
+        }
+        else {
+            document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
         }
         console.log('Business search request status: ' + request.status);
       }
@@ -141,15 +209,24 @@ function getJsonResult(url) {
 async function fetchData(locationUrl, searchUrl, keyword, distance, category) {
     let lat = 1, lng = 2;
 
-    if(document.getElementById("auto-locate").checked) {
-        const response = await fetch(`https://ipinfo.io/?token=33d28f55a75e60`);
-        const json = await response.json();
-        [lat, lng] = json.loc.split(",");
-    } else {
-        const response = await fetch(locationUrl);
-        const json = await response.json();
-        lat = json.results[0].geometry.location.lat;
-        lng = json.results[0].geometry.location.lng;
+    
+
+    try 
+    {
+        if(document.getElementById("auto-locate").checked) {
+            const response = await fetch(`https://ipinfo.io/?token=33d28f55a75e60`);
+            const json = await response.json();
+            [lat, lng] = json.loc.split(",");
+        } else {
+            const response = await fetch(locationUrl);
+            const json = await response.json();
+            lat = json.results[0].geometry.location.lat;
+            lng = json.results[0].geometry.location.lng;
+        }
+    } 
+    catch(err)
+    {
+        document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
     }
 
     
@@ -163,19 +240,45 @@ async function fetchData(locationUrl, searchUrl, keyword, distance, category) {
     // return json;
 }
 
-function getSearchResults(baseUrl) {
+// function getSearchResults(baseUrl) {
+//     const keyword = encodeURIComponent(document.getElementById("keyword").value);
+//     const distance = encodeURIComponent(document.getElementById("distance").value);
+//     const category = encodeURIComponent(document.getElementById("category").value);
+//     const location = encodeURIComponent(document.getElementById("location").value);
+//     const locationUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyCjjsZZeqjH4xjyNhzu6RYND8kif389U7w`;
+    
+//     try {
+//         fetchData(locationUrl, baseUrl, keyword, Math.ceil(distance*1609.34), category);
+//     }
+//     catch(err) {
+//         document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+//     }
+
+//     // console.log(coordinates);
+
+//     //console.log('Yayy');
+    
+//     //event.preventDefault();
+// }
+
+//New changes to mandate form
+var searchFunction = function(event) {
     const keyword = encodeURIComponent(document.getElementById("keyword").value);
     const distance = encodeURIComponent(document.getElementById("distance").value);
     const category = encodeURIComponent(document.getElementById("category").value);
     const location = encodeURIComponent(document.getElementById("location").value);
     const locationUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyCjjsZZeqjH4xjyNhzu6RYND8kif389U7w`;
     
-    fetchData(locationUrl, baseUrl, keyword, Math.ceil(distance*1609.34), category);
-
-
-    // console.log(coordinates);
-
-    //console.log('Yayy');
-    
-    //event.preventDefault();
+    try 
+    {
+        fetchData(locationUrl, '/getNearbyBusinesses', keyword, Math.ceil(distance*1609.34), category);
+    } 
+    catch(err)
+    {
+        document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+    }
+    event.preventDefault();
 }
+
+// attach event listener
+document.getElementById("form").addEventListener("submit", searchFunction, true);
