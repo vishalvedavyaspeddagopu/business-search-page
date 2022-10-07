@@ -2,13 +2,13 @@
 <html>
     <head>
         <title>Business Search</title>
-        <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+        <link rel="stylesheet" type= "text/css" href= "styles/styles.css">
     </head>
     <body>
         <div id="main">
             <div id="search">
                 <div class="img-container">
-                    <img class="img" src="static/styles/banner.jpeg" />
+                    <img class="img" src="styles/banner.jpeg" />
                     <div class="title">
                         <h2>Business Search</h2>
                         <h3>Fill out the form to get businesses near you!</h3>
@@ -23,22 +23,22 @@
                         <div class="section_2">
                             <div class="input_row_2">
                                 <label for="distance">Distance(miles)</label><br>
-                                <input class="text_box" type="text" id="distance" name="distance" value="10">
+                                <input class="text_box" type="text" id="distance" name="distance" value="10" required>
                             </div>
                             <div class="input_row_3">
-                                <label for="category">Category<span id="asterisk">*</span></label>
+                                <label for="category">Category <span id="asterisk">*</span></label>
                                 <select name="category" class="text_box" id="category" required>
-                                    <option value="Default">Default</option>
-                                    <option value="Arts & Entertainment">Arts & Entertainment</option>
-                                    <option value="Health & Medical">Health & Medical</option>
-                                    <option value="Hotels & Travel">Hotels & Travel</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Professional Services">Professional Services</option>
+                                    <option value="all">Default</option>
+                                    <option value="arts">Arts & Entertainment</option>
+                                    <option value="health">Health & Medical</option>
+                                    <option value="hotelstravel">Hotels & Travel</option>
+                                    <option value="food">Food</option>
+                                    <option value="professional">Professional Services</option>
                                 </select>
                             </div>
                         </div>
                         <div class="input_row">
-                            <label for="location">Location<span id="asterisk">*</span></label><br>
+                            <label for="location">Location <span id="asterisk">*</span></label><br>
                             <input class="text_box" type="text" id="location" name="location" required><br>
                         </div>
                         <hr>
@@ -56,6 +56,6 @@
             <div id="grid"></div>
             <div id="detail"></div>
         </div>
-        <script src="{{url_for('static', filename='javascript/pagescript.js')}}"></script>
+        <script src="javascript/pagescript.js"></script>
     </body>
 </html>

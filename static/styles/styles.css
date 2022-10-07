@@ -2,7 +2,7 @@ body {
     background-color: #d7d7d7;
 }
 
-#main {
+#search {
     font-family: Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -10,8 +10,19 @@ body {
     color: red;
 }
 
+#grid {
+    font-family: sans-serif;
+    font-weight: lighter;
+}
+
+#detail {
+    font-family: sans-serif;
+}
+
 .detail_info {
-    margin-bottom: 50px;
+    margin-bottom: 45px;
+    font-family: sans-serif;
+    font-weight: lighter;
 }
 
 .detail_info .heading {
@@ -42,10 +53,23 @@ body {
     text-decoration: none;
     display: inline-block;
     font-size: 18px;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 400;
+    font-family: sans-serif;
+    font-weight: lighter;
     margin-top: 12px;
     cursor: pointer;
+}
+
+.name_cell p:hover {
+    color: #d7d7d7;
+    filter: brightness(80%);
+}
+
+#submit:hover {
+    filter: brightness(120%);
+}
+
+#reset:hover {
+    filter: brightness(80%);
 }
 
 .section_2 {
@@ -166,17 +190,27 @@ th {
     margin-top: 30px;
 }
 
-#detail_images {
-    height: 300px;
-    width: 250px;
+.detail_images {
     border: 1px solid #d7d7d7;
-    display: inline-block;
-    box-sizing: border-box;
-    margin-bottom: 30px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.detail_images:hover {
+    border: 1px solid #5A5A5A;
+}
+
+
+.photo-name {
+    margin-top: auto;
+    margin-bottom: 10px;
 }
 
 #shop_status{
-    background-color: red; /* Green */
     border: none;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -187,33 +221,35 @@ th {
     font-size: 16px;
 }
 
-#detail_images img {
-    height: 250px;
+.detail_images img {
     width: 250px;
     object-fit: contain;
     object-position: 0 0;
     margin-bottom: 18px;
 }
 
-/* .panel {
-    height: 350px;
-    width: 45%;
-    text-align: left;
-    display: inline-block;
-    box-sizing: border-box;
-} */
  .panel {
     display: flex;
     flex-direction: row;
     text-align: left;
-    /* width: 100%; */
     padding-top: 20px;
     padding-left: 20px;
     padding-right: 20px;
  }
 
+ .img-gallery {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 30px;
+    align-items: stretch;
+ }
+
  #business_title {
-    padding-top: 40px;
+    padding-top: 30px;
  }
 
  #hr_detail {
@@ -235,13 +271,12 @@ thead tr th {
     width: 50px;
 }
 
-#rating_cell, #distance_cell {
+.rating_cell, .distance_cell {
     height: 120px;
     width: 150px;
-    /* box-sizing: border-box; */
 }
 
-#image_cell {
+.image_cell {
     height: 120px;
     width: 110px;
 }
@@ -257,8 +292,9 @@ table {
     width: 1040px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 130px;
+    margin-top: 40px;
     text-align: center;
     background-color: whitesmoke;
-    border: 1px solid #d7d7d7;
+    border: 2px solid rgb(200, 200, 200);
+    font-size: 20px;
 }

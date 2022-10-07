@@ -7,7 +7,7 @@ let sortingKeys = {
 };
 
 function fillBusinessDetails(detail) {
-    let text = `<div>
+    let text = `<div style="border:2px solid rgb(200, 200, 200)"><div>
                     <h2 id="business_title">${detail.name}</h2>
                     <hr id="hr_detail">
                 </div>
@@ -15,7 +15,7 @@ function fillBusinessDetails(detail) {
                     <div class="detail_section">`;
 
     if(detail.hours && detail.hours.length >= 1 && detail.hours[0].is_open_now != null) {
-        text += `<div class="detail_info">
+        text += `<div class="detail_info" style="margin-bottom:23px">
                     <div class="heading">Status</div>
                     <button id="shop_status" style="background-color:${detail.hours[0].is_open_now ? "green" : "red"}">${detail.hours[0].is_open_now ? "Open Now" : "Closed"}</button>
                 </div>`;
@@ -32,13 +32,14 @@ function fillBusinessDetails(detail) {
     if(detail.transactions && detail.transactions.length >= 1) {
         text += `<div class="detail_info">
                     <div class="heading">Transactions Supported</div>
-                    <div>${detail.transactions.join(' ')}</div>
+                    <div>${detail.transactions.map(each => (each === "restaurant_reservation" ? "Restaurant Reservation"
+                                                                                            : (each === "pickup" ? "Pickup" : "Delivery"))).join(' | ')}</div>
                 </div>`;
     }
     if(detail.url) {
         text += `<div class="detail_info">
                     <div class="heading">More info</div>
-                    <a href="${detail.url}">Yelp</a>
+                    <a href="${detail.url}" target="_blank">Yelp</a>
                 </div>`;
     }
 
@@ -58,22 +59,25 @@ function fillBusinessDetails(detail) {
                 </div>`;
     }
     if(detail.price) {
-        text += `<div>
+        text += `<div class="detail_info">
                     <div class="heading">Price</div>
                     <div>${detail.price}</div>
                 </div>`;
     }
 
     text += `</div>
-        </div>`;
+        </div>
+        <div class="img-gallery">`;
 
     for(let i = 0; i < Math.min(detail.photos.length, 3); i++)
     {
-        text += `<div id="detail_images">
+        text += `<div class="detail_images">
                     <img src="${detail.photos[i]}"/>
-                    <div>Photo ${i + 1}</div>     
+                    <div class="photo-name">Photo ${i + 1}</div>     
                 </div>`;
     }
+
+    text += `</div></div>`;
 
     return text;
 }
@@ -87,6 +91,7 @@ function getBusinessDetail(index) {
         if(request.status === 200) {
             let result = JSON.parse(request.responseText);
             document.getElementById("detail").innerHTML = fillBusinessDetails(result);
+            window.location.href = "https://yelp-business-vive97.wl.r.appspot.com/home.html#detail";
         }
         console.log('Business detail request status: ' + request.status);
       }
@@ -126,6 +131,7 @@ function resetToDefault() {
     document.getElementById("auto-locate").checked = false;
     document.getElementById("grid").innerHTML = "";
     document.getElementById("detail").innerHTML = "";
+    window.location.href = "https://yelp-business-vive97.wl.r.appspot.com/home.html";
 }
 
 function disableLocationBox() {
@@ -142,10 +148,10 @@ function disableLocationBox() {
 function createRow(index, image, name, rating, distance) {
     return `<tr>
                 <td>${index}</td>
-                <td id="image_cell"><img src="${image}" height="100" width="100"></td>
-                <td id="name_cell"><p id="${index}" onclick="getBusinessDetail(this.id)">${name}</p></td>
-                <td id="rating_cell">${rating}</td>
-                <td id="distance_cell">${(parseFloat(distance)/1609.34).toFixed(2)}</td>
+                <td class="image_cell"><img src="${image}" height="100" width="100"></td>
+                <td class="name_cell"><p id="${index}" onclick="getBusinessDetail(this.id)" style="cursor:pointer">${name}</p></td>
+                <td class="rating_cell">${rating}</td>
+                <td class="distance_cell">${(parseFloat(distance)/1609.34).toFixed(2)}</td>
             </tr>`;
 }
 
@@ -155,9 +161,9 @@ function generateTable(businesses) {
                         <tr>
                             <th id="number">No.</th>
                             <th>Image</th>
-                            <th onclick="sortData('${sortingKeys["name"]}')">Business Name</th>
-                            <th onclick="sortData('${sortingKeys["rating"]}')">Rating</th>
-                            <th onclick="sortData('${sortingKeys["distance"]}')">Distance (miles)</th>
+                            <th style="cursor:pointer" onclick="sortData('${sortingKeys["name"]}')">Business Name</th>
+                            <th style="cursor:pointer" onclick="sortData('${sortingKeys["rating"]}')">Rating</th>
+                            <th style="cursor:pointer" onclick="sortData('${sortingKeys["distance"]}')">Distance (miles)</th>
                         </tr>
                     </thead>`;
 
@@ -176,6 +182,7 @@ function generateTable(businesses) {
     return text;
 }
 
+//Adding a comment to force GCP refresh again
 function getJsonResult(url) {
     const request = new XMLHttpRequest();
     request.open("GET", url);
@@ -188,17 +195,21 @@ function getJsonResult(url) {
                 data = result["businesses"];
                 if(data.length > 0) {
                     document.getElementById("grid").innerHTML = generateTable(data);
+                    window.location.href = "https://yelp-business-vive97.wl.r.appspot.com/home.html#grid";
                 } else {
                     document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+                    document.getElementById("detail").innerHTML = "";
                 }
             } 
             catch(err)
             {
                 document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+                document.getElementById("detail").innerHTML = "";
             }            
         }
         else {
             document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+            document.getElementById("detail").innerHTML = "";
         }
         console.log('Business search request status: ' + request.status);
       }
@@ -208,8 +219,6 @@ function getJsonResult(url) {
 
 async function fetchData(locationUrl, searchUrl, keyword, distance, category) {
     let lat = 1, lng = 2;
-
-    
 
     try 
     {
@@ -227,39 +236,13 @@ async function fetchData(locationUrl, searchUrl, keyword, distance, category) {
     catch(err)
     {
         document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+        document.getElementById("detail").innerHTML = "";
     }
-
     
-    // console.log(json);
     console.log(lat + ' ' + lng);
 
     getJsonResult(`${searchUrl}?term=${keyword}&radius=${distance}&categories=${category}&latitude=${lat}&longitude=${lng}`);
-
-    // payload = {'term': 'Pizza', 'latitude': 34.0223519, 'longitude': -118.285117, 'categories': 'Food', 'radius': 16100};
-
-    // return json;
 }
-
-// function getSearchResults(baseUrl) {
-//     const keyword = encodeURIComponent(document.getElementById("keyword").value);
-//     const distance = encodeURIComponent(document.getElementById("distance").value);
-//     const category = encodeURIComponent(document.getElementById("category").value);
-//     const location = encodeURIComponent(document.getElementById("location").value);
-//     const locationUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyCjjsZZeqjH4xjyNhzu6RYND8kif389U7w`;
-    
-//     try {
-//         fetchData(locationUrl, baseUrl, keyword, Math.ceil(distance*1609.34), category);
-//     }
-//     catch(err) {
-//         document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
-//     }
-
-//     // console.log(coordinates);
-
-//     //console.log('Yayy');
-    
-//     //event.preventDefault();
-// }
 
 //New changes to mandate form
 var searchFunction = function(event) {
@@ -276,7 +259,10 @@ var searchFunction = function(event) {
     catch(err)
     {
         document.getElementById("grid").innerHTML = `<div id="norecord">No record has been found</div>`;
+        document.getElementById("detail").innerHTML = "";
     }
+    //Check if this is the expected behavior. If not, remove it.
+    document.getElementById("detail").innerHTML = "";
     event.preventDefault();
 }
 
